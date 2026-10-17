@@ -7,4 +7,5 @@ export * from "./institute";
 export * from "./transaction";
 export * from "./eventRegistration";
 export * from "./team";
+export * from "./teamInvitation";
 export * from "./relations";

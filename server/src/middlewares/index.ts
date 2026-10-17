@@ -9,3 +9,4 @@ export {
 } from './responseHandler';
 export { errorHandler, notFoundHandler } from './errorHandler';
 export { validateRequest } from './schemaValidator';
+export { authenticateUser, requireAuth, requireAdmin } from './auth';

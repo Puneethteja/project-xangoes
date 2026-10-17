@@ -6,6 +6,7 @@ import { eventRegistrations } from './eventRegistration';
 import { fests } from './fest';
 import { institutes } from './institute';
 import { teams } from './team';
+import { teamInvitations } from './teamInvitation';
 import { transactions } from './transaction';
 import { users } from './user';
 
@@ -18,6 +19,8 @@ export const userRelations = relations(users, ({ one, many }) => ({
     transactions: many(transactions),
     eventRegistrations: many(eventRegistrations),
     teamMemberships: many(teams),
+    sentInvitations: many(teamInvitations, { relationName: "invitedBy" }),
+    receivedInvitations: many(teamInvitations, { relationName: "targetUser" }),
 }));
 
 // Fest relations
@@ -69,17 +72,49 @@ export const eventRegistrationRelations = relations(
             fields: [eventRegistrations.eventID],
             references: [events.id],
         }),
+        team: one(teams, {
+            fields: [eventRegistrations.teamID],
+            references: [teams.id],
+        }),
     })
 );
 
 // Team relations
-export const teamRelations = relations(teams, ({ one }) => ({
-    user: one(users, {
-        fields: [teams.userID],
+export const teamRelations = relations(teams, ({ one, many }) => ({
+    lead: one(users, {
+        fields: [teams.teamLead],
         references: [users.id],
     }),
     club: one(clubs, {
         fields: [teams.clubID],
         references: [clubs.id],
+    }),
+    fest: one(fests, {
+        fields: [teams.festID],
+        references: [fests.id],
+    }),
+    event: one(events, {
+        fields: [teams.eventID],
+        references: [events.id],
+    }),
+    registrations: many(eventRegistrations),
+    invitations: many(teamInvitations),
+}));
+
+// TeamInvitation relations
+export const teamInvitationRelations = relations(teamInvitations, ({ one }) => ({
+    team: one(teams, {
+        fields: [teamInvitations.teamID],
+        references: [teams.id],
+    }),
+    user: one(users, {
+        fields: [teamInvitations.userID],
+        references: [users.id],
+        relationName: "targetUser",
+    }),
+    inviter: one(users, {
+        fields: [teamInvitations.invitedBy],
+        references: [users.id],
+        relationName: "invitedBy",
     }),
 }));
