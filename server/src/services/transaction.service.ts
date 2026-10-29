@@ -84,8 +84,8 @@ export class TransactionService {
                 screenshot: null,
                 isVerified: false, // Never verified initially!
                 status: "PENDING",
-                paymentProvider: paymentOrder.provider,
-                paymentOrderId: paymentOrder.orderId,
+                provider: paymentOrder.provider,
+                providerOrderID: paymentOrder.orderId,
                 metadata: paymentOrder.metadata || null,
                 createdAt: new Date(),
                 updatedAt: new Date(),
@@ -199,7 +199,7 @@ export class TransactionService {
                     .set({
                         isVerified: true,
                         status: "VERIFIED",
-                        paymentOrderId: verification.providerOrderId || transaction.paymentOrderId,
+                        providerOrderID: verification.providerOrderId || transaction.providerOrderID,
                         metadata: {
                             ...(transaction.metadata as object),
                             webhookPayload: verification.rawPayload,
@@ -245,7 +245,7 @@ export class TransactionService {
             const [failedTx] = await db
                 .update(transactions)
                 .set({
-                    status: "FAILED",
+                    status: "REJECTED",
                     rejectionReason: "Payment failed at gateway provider",
                     updatedAt: new Date(),
                 })
@@ -309,8 +309,8 @@ export class TransactionService {
                 rejectionReason: transactions.rejectionReason,
                 reviewedBy: transactions.reviewedBy,
                 reviewedAt: transactions.reviewedAt,
-                paymentProvider: transactions.paymentProvider,
-                paymentOrderId: transactions.paymentOrderId,
+                provider: transactions.provider,
+                providerOrderID: transactions.providerOrderID,
                 metadata: transactions.metadata,
                 createdAt: transactions.createdAt,
                 userName: users.name,

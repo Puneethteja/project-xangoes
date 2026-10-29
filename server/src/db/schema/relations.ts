@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
 
 import { clubs } from './club';
+import { clubMembers } from './clubMember';
 import { events } from './event';
 import { eventRegistrations } from './eventRegistration';
 import { fests } from './fest';
@@ -10,45 +11,48 @@ import { teamInvitations } from './teamInvitation';
 import { transactions } from './transaction';
 import { users } from './user';
 
-// User relations
 export const userRelations = relations(users, ({ one, many }) => ({
     institute: one(institutes, {
         fields: [users.college],
         references: [institutes.id],
     }),
+    fest: one(fests, {
+        fields: [users.festID],
+        references: [fests.id],
+    }),
     transactions: many(transactions),
     eventRegistrations: many(eventRegistrations),
-    teamMemberships: many(teams),
+    leadTeams: many(teams),
+    clubMemberships: many(clubMembers),
     sentInvitations: many(teamInvitations, { relationName: "invitedBy" }),
     receivedInvitations: many(teamInvitations, { relationName: "targetUser" }),
 }));
 
-// Fest relations
 export const festRelations = relations(fests, ({ many }) => ({
     transactions: many(transactions),
+    teams: many(teams),
+    users: many(users),
 }));
 
-// Club relations
 export const clubRelations = relations(clubs, ({ many }) => ({
     events: many(events),
     teams: many(teams),
+    members: many(clubMembers),
 }));
 
-// Event relations
 export const eventRelations = relations(events, ({ one, many }) => ({
     club: one(clubs, {
         fields: [events.clubId],
         references: [clubs.id],
     }),
     registrations: many(eventRegistrations),
+    teams: many(teams),
 }));
 
-// Institute relations
 export const instituteRelations = relations(institutes, ({ many }) => ({
     users: many(users),
 }));
 
-// Transaction relations
 export const transactionRelations = relations(transactions, ({ one }) => ({
     user: one(users, {
         fields: [transactions.userID],
@@ -60,7 +64,6 @@ export const transactionRelations = relations(transactions, ({ one }) => ({
     }),
 }));
 
-// EventRegistration relations
 export const eventRegistrationRelations = relations(
     eventRegistrations,
     ({ one }) => ({
@@ -79,8 +82,11 @@ export const eventRegistrationRelations = relations(
     })
 );
 
-// Team relations
 export const teamRelations = relations(teams, ({ one, many }) => ({
+    teamLeadUser: one(users, {
+        fields: [teams.teamLead],
+        references: [users.id],
+    }),
     lead: one(users, {
         fields: [teams.teamLead],
         references: [users.id],
@@ -101,7 +107,6 @@ export const teamRelations = relations(teams, ({ one, many }) => ({
     invitations: many(teamInvitations),
 }));
 
-// TeamInvitation relations
 export const teamInvitationRelations = relations(teamInvitations, ({ one }) => ({
     team: one(teams, {
         fields: [teamInvitations.teamID],
@@ -116,5 +121,16 @@ export const teamInvitationRelations = relations(teamInvitations, ({ one }) => (
         fields: [teamInvitations.invitedBy],
         references: [users.id],
         relationName: "invitedBy",
+    }),
+}));
+
+export const clubMemberRelations = relations(clubMembers, ({ one }) => ({
+    club: one(clubs, {
+        fields: [clubMembers.clubID],
+        references: [clubs.id],
+    }),
+    user: one(users, {
+        fields: [clubMembers.userID],
+        references: [users.id],
     }),
 }));

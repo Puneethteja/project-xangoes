@@ -5,6 +5,7 @@ import { healthService } from "@/services/health.service";
 
 import { healthRouter } from "./health";
 import { testRouter } from "./test";
+import { storageRouter } from "./storage";
 import { registrationRouter } from "./registration.routes";
 import { teamRouter } from "./team.routes";
 import { transactionRouter } from "./transaction.routes";
@@ -16,6 +17,7 @@ export const routes = new Hono();
 // Core & Health routes
 routes.route("/health", healthRouter);
 routes.route("/test", testRouter);
+routes.route("/storage", storageRouter);
 
 // Participant Operations & Management routes (Puneet)
 routes.route("/registrations", registrationRouter);

@@ -4,9 +4,13 @@
         "skipLibCheck": true,
         "jsx": "react-jsx",
         "jsxImportSource": "hono/jsx",
-        "types": ["bun"],
+        "moduleResolution": "bundler",
+        "target": "ES2022",
+        "module": "ESNext",
+        "types": ["bun", "node"],
         "paths": {
             "@/*": ["./src/*"]
         }
-    }
+    },
+    "include": ["src/**/*", "test/**/*"]
 }

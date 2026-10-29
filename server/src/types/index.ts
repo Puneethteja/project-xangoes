@@ -5,7 +5,8 @@ export interface ApiResponse<T = any> {
     success: boolean;
     message: string;
     data?: T;
-    error?: string;
+    error?: any;
+    requestId?: string;
     timestamp: string;
 }
 
@@ -59,4 +60,4 @@ export type TeamInvitationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCEL
 
 // Transaction Types
 export type TransactionType = 'REGISTRATION' | 'MERCH' | 'EVENT';
-export type TransactionStatus = 'PENDING' | 'VERIFIED' | 'REJECTED' | 'FAILED';
+export type TransactionStatus = 'PENDING' | 'VERIFIED' | 'REJECTED';

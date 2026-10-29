@@ -1,5 +1,5 @@
 process.env.DATABASE_URL = process.env.DATABASE_URL || "postgres://postgres:postgres@localhost:5432/xangoes";
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import { ManualPaymentProvider } from "@/services/payment/manual.provider";
 import { OnlineGatewayProvider } from "@/services/payment/onlineGateway.provider";
 import { paymentService } from "@/services/payment/payment.service";
@@ -97,7 +97,7 @@ describe("Secure Storage Provider for Payment Evidence", () => {
     });
 
     it("should reject unsupported evidence file types", async () => {
-        expect(
+        await expect(
             storage.generateSignedUploadUrl("malicious.exe", "application/x-msdownload")
         ).rejects.toThrow("Unsupported evidence format");
     });

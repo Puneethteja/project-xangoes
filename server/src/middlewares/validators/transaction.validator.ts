@@ -36,7 +36,7 @@ export const transactionQuerySchema = z.object({
         .transform((val) => parseInt(val, 10))
         .pipe(z.number().min(1).max(100))
         .optional(),
-    status: z.enum(["PENDING", "VERIFIED", "REJECTED", "FAILED"]).optional(),
+    status: z.enum(["PENDING", "VERIFIED", "REJECTED"]).optional(),
     type: z.enum(["REGISTRATION", "EVENT", "MERCH"]).optional(),
     festID: z.string().optional(),
     userID: z.string().optional(),
